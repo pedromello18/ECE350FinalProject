@@ -24,13 +24,13 @@
  *
  **/
 
-module Wrapper (CLK50MHZ, BTNU, LED);
-	input CLK50MHZ, BTNU;
+module Wrapper (CLK75MHZ, BTNU, LED);
+	input CLK75MHZ, BTNU;
 	output [15:0] LED;
 	assign LED = reg14[15:0];
 	
 	wire clock, reset;
-	assign clock = CLK50MHZ;
+	assign clock = CLK75MHZ;
 	assign reset = BTNU;
 
 	wire rwe, mwe;
