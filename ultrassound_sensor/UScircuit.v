@@ -1,29 +1,35 @@
-module UScircuit(LED, JA[2], JA[1], CLK50MHZ);
-    input JA[1], CLK50MHZ;
+module UScircuit(LED, JA1, JB1, CLK50MHZ);
+    input CLK50MHZ, JA1;
     output[15:0] LED;
-    output JA[2];
+    output JB1;
 
     reg trig, echo, trigCounter;
-    reg [15:0] distance;
+    reg [31:0] distance;
+    wire clk;
+    
+    initial trig = 0;
+    initial echo = 0;
+    initial trigCounter = 0;
+    initial distance = 0;
 
-    assign trig = JA[2];
-    assign echo = JA[1];
+    assign JB1 = trig;
     assign clk = CLK50MHZ;
+    
+    assign LED = (distance*340) / 1000000; // LED will be a reg that displays distance in cm
 
     always @(posedge clk) begin
+        echo <= JA1;
         trigCounter <= trigCounter + 1;
         if (trigCounter < 500) begin
             trig <= 1;
-        end
-        else begin 
+        end else begin
             trig <= 0;
         end
-        if (trigCounter > 500000000) begin
+        if (trigCounter > 50000000) begin
             trigCounter <= 0;
         end
         if (echo) begin
             distance <= distance + 1;
         end
-        LED = (distance*340) / 1000000; // LED will be a reg that displays distance in cm
     end
 endmodule
