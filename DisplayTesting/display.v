@@ -2,8 +2,8 @@ module display(JA1, JA2, JA3, JA4, JA7, JA8, JA9, JB1, JB2, JB3, JB4, JB7, JB8, 
     output JA1, JA2, JA3, JA4, JA7, JA8, JA9, JB1, JB2, JB3, JB4, JB7, JB8, JB9;
     input [15:0] SW;
 
-    reg [15:0] msd, lsd;
-    reg [6:0] ctrl_msd, ctrl_lsd;
+    reg [15:0] msd, lsd = 0;
+    reg [6:0] ctrl_msd, ctrl_lsd = 0;
 
     assign {JA1, JA2, JA3, JA4, JA7, JA8, JA9} = ctrl_msd; // JA1 = A, JA2 = B, ...
     assign {JB1, JB2, JB3, JB4, JB7, JB8, JB9} = ctrl_lsd;
