@@ -44,12 +44,12 @@ module FPGA7seg(CA, CB, CC, CD, CE, CF, CG, AN, SW, CLK50MHZ);
         case (digitCounter)
             0 : ctrl = ctrl_slsd;
             1 : ctrl = ctrl_smsd;
-            2 : ctrl = 7'b000_0000;
-            3 : ctrl = 7'b000_0000;
+            2 : ctrl = 7'b111_1111;
+            3 : ctrl = 7'b111_1111;
             4 : ctrl = ctrl_flsd;
             5 : ctrl = ctrl_fmsd;
-            6 : ctrl = 7'b000_0000;
-            7 : ctrl = 7'b000_0000;
+            6 : ctrl = 7'b111_1111;
+            7 : ctrl = 7'b111_1111;
         endcase
 
 
