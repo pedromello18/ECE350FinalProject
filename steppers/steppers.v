@@ -1,11 +1,10 @@
-module steppers(JA1, JA2, JA3, JA4, JA7, CLK50MHZ, SW0);
-    output JA1, JA2, JA3, JA4, JA7;
+module steppers(JA1, JA2, JA3, JA4, CLK50MHZ, SW0);
+    output JA1, JA2, JA3, JA4;
     input CLK50MHZ, SW0;
     wire rotationDirectionChange;
     assign rotationDirectionChange = SW0;
 
     assign {JA1, JA2, JA3, JA4} = ctrl;
-    assign JA7 = CLK100HZ;
 
     reg[3:0] ctrl = 0;
     reg[31:0] divcounter = 0;
