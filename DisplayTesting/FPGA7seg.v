@@ -6,7 +6,7 @@ module FPGA7seg(CA, CB, CC, CD, CE, CF, CG, AN, SW, CLK50MHZ);
 
     reg CLK1khz = 0;
     reg [31:0] khz1counter = 0;
-    reg digitCounter = 0;
+    reg [2:0] digitCounter = 0;
     reg [7:0] oneColdAnode = 0;
     reg [6:0] ctrl = 0;
 
@@ -27,9 +27,6 @@ module FPGA7seg(CA, CB, CC, CD, CE, CF, CG, AN, SW, CLK50MHZ);
 
     always @(posedge CLK1khz) begin
         digitCounter = digitCounter + 1;
-        if (digitCounter >= 8) begin
-            digitCounter = 0;
-        end
     end
 
     always begin
@@ -59,55 +56,55 @@ module FPGA7seg(CA, CB, CC, CD, CE, CF, CG, AN, SW, CLK50MHZ);
         fmsd = SW[15:8]/10;
         flsd = SW[15:8] - fmsd*10;
         case (fmsd)
-            0 : ctrl_fmsd = 7'b1111110;
-            1 : ctrl_fmsd = 7'b0110000;
-            2 : ctrl_fmsd = 7'b1101101;
-            3 : ctrl_fmsd = 7'b1111001;
-            4 : ctrl_fmsd = 7'b0110011;
-            5 : ctrl_fmsd = 7'b1011011;
-            6 : ctrl_fmsd = 7'b1011111;
-            7 : ctrl_fmsd = 7'b1110000;
-            8 : ctrl_fmsd = 7'b1111111;
-            9 : ctrl_fmsd = 7'b1110011;
+            0 : ctrl_fmsd = 7'b0000001;
+            1 : ctrl_fmsd = 7'b1001111;
+            2 : ctrl_fmsd = 7'b0010010;
+            3 : ctrl_fmsd = 7'b0000110;
+            4 : ctrl_fmsd = 7'b1001100;
+            5 : ctrl_fmsd = 7'b0100100;
+            6 : ctrl_fmsd = 7'b0100000;
+            7 : ctrl_fmsd = 7'b0001111;
+            8 : ctrl_fmsd = 7'b0000000;
+            9 : ctrl_fmsd = 7'b0001100;
         endcase
         case (flsd)
-            0 : ctrl_flsd = 7'b1111110;
-            1 : ctrl_flsd = 7'b0110000;
-            2 : ctrl_flsd = 7'b1101101;
-            3 : ctrl_flsd = 7'b1111001;
-            4 : ctrl_flsd = 7'b0110011;
-            5 : ctrl_flsd = 7'b1011011;
-            6 : ctrl_flsd = 7'b1011111;
-            7 : ctrl_flsd = 7'b1110000;
-            8 : ctrl_flsd = 7'b1111111;
-            9 : ctrl_flsd = 7'b1110011;
+            0 : ctrl_flsd = 7'b0000001;
+            1 : ctrl_flsd = 7'b1001111;
+            2 : ctrl_flsd = 7'b0010010;
+            3 : ctrl_flsd = 7'b0000110;
+            4 : ctrl_flsd = 7'b1001100;
+            5 : ctrl_flsd = 7'b0100100;
+            6 : ctrl_flsd = 7'b0100000;
+            7 : ctrl_flsd = 7'b0001111;
+            8 : ctrl_flsd = 7'b0000000;
+            9 : ctrl_flsd = 7'b0001100;
         endcase
 
         smsd = SW[7:0]/10;
         slsd = SW[7:0] - smsd*10;
         case (smsd)
-            0 : ctrl_smsd = 7'b1111110;
-            1 : ctrl_smsd = 7'b0110000;
-            2 : ctrl_smsd = 7'b1101101;
-            3 : ctrl_smsd = 7'b1111001;
-            4 : ctrl_smsd = 7'b0110011;
-            5 : ctrl_smsd = 7'b1011011;
-            6 : ctrl_smsd = 7'b1011111;
-            7 : ctrl_smsd = 7'b1110000;
-            8 : ctrl_smsd = 7'b1111111;
-            9 : ctrl_smsd = 7'b1110011;
+            0 : ctrl_smsd = 7'b0000001;
+            1 : ctrl_smsd = 7'b1001111;
+            2 : ctrl_smsd = 7'b0010010;
+            3 : ctrl_smsd = 7'b0000110;
+            4 : ctrl_smsd = 7'b1001100;
+            5 : ctrl_smsd = 7'b0100100;
+            6 : ctrl_smsd = 7'b0100000;
+            7 : ctrl_smsd = 7'b0001111;
+            8 : ctrl_smsd = 7'b0000000;
+            9 : ctrl_smsd = 7'b0001100;
         endcase
         case (slsd)
-            0 : ctrl_slsd = 7'b1111110;
-            1 : ctrl_slsd = 7'b0110000;
-            2 : ctrl_slsd = 7'b1101101;
-            3 : ctrl_slsd = 7'b1111001;
-            4 : ctrl_slsd = 7'b0110011;
-            5 : ctrl_slsd = 7'b1011011;
-            6 : ctrl_slsd = 7'b1011111;
-            7 : ctrl_slsd = 7'b1110000;
-            8 : ctrl_slsd = 7'b1111111;
-            9 : ctrl_slsd = 7'b1110011;
+            0 : ctrl_slsd = 7'b0000001;
+            1 : ctrl_slsd = 7'b1001111;
+            2 : ctrl_slsd = 7'b0010010;
+            3 : ctrl_slsd = 7'b0000110;
+            4 : ctrl_slsd = 7'b1001100;
+            5 : ctrl_slsd = 7'b0100100;
+            6 : ctrl_slsd = 7'b0100000;
+            7 : ctrl_slsd = 7'b0001111;
+            8 : ctrl_slsd = 7'b0000000;
+            9 : ctrl_slsd = 7'b0001100;
         endcase
     end
 endmodule
