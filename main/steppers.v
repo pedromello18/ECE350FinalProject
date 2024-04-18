@@ -1,7 +1,6 @@
 module steppers(JA1, JA2, JA3, JA4, CLK50MHZ, rotationDirectionChange, motorEnable);
     output JA1, JA2, JA3, JA4;
     input CLK50MHZ, rotationDirectionChange, motorEnable;
-    assign rotationDirectionChange = SW0;
 
     assign {JA1, JA2, JA3, JA4} = ctrl;
 
