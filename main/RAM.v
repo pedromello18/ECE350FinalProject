@@ -21,13 +21,10 @@ module RAM #( parameter DATA_WIDTH = 32, ADDRESS_WIDTH = 12, DEPTH = 20) (
     
     always @(posedge clk) begin
         if(wEn) begin
-            if (addr != 0) begin
-                MemoryArray[addr] <= dataIn;
-            end else begin
-                MemoryArray[0] <= {31'b0, newGame};
-            end
+            MemoryArray[addr] <= dataIn;
         end else begin
             dataOut <= MemoryArray[addr];
         end
+        MemoryArray[0] <= {31'b0, newGame};
     end
 endmodule
