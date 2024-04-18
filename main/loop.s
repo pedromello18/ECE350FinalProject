@@ -6,6 +6,7 @@
 # 27 - current score
 # 26 - max score
 # 25 - stepper control - bit 1 is direction; bit 0 is enable
+# 24 - moment of score increase
 
 # SPECIAL MEMORY LOCATIONS:
 # address 0 - new game input
@@ -21,27 +22,38 @@ loop:
         addi $28, $0, 80 # game length 
         add $29, $0, $0
         addi $25, $0, 1
+        addi $24, $0, 81
         # LED countdown/sounds if applicable
 
-        #Game Loop
         gameLoop:
-            addi $29, $29, 10 # number of clock cycles for each game loop
+            addi $29, $29, 10 # approx number of clock cycles for each game loop
 
             addi $1, $0, 762 # this block adds 50 000 000 to r1, the number of isns executed per second
             sll $1, $1, 16
             addi $1, $1, 61568
 
             blt $1, $29, changeGameTimer
-
             j dontChangeTimer
+
             changeGameTimer:
                 addi $28, $28, -1
                 add $29, $0, $0
             dontChangeTimer:
-                # if sensor distance < 10cm, score+=1
-                add $1, $28, $0
+                # if sensor distance < 15cm, score+=1
+                lw $1, 1($0)
+                addi $2, $0, 15
+                blt $2, $1, noScore
+
+                blt $28, $24, Score # implies max score is 80
+
+                j noScore
+            Score:
+                addi $27, $27, 1
+                add $24, $28, $0
+
+            noScore:
                 addi $2, $0, 2
-                and $3, $2, $1 # checks if bit2 of game clock is 1 - effectively, every four seconds
+                and $3, $2, $28 # checks if bit1 of game clock is 1 - effectively, every two seconds
                 addi $4, $0, 1
                 blt $3, $4, motorLeft
                 motorRight:

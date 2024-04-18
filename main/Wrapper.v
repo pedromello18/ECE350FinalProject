@@ -24,17 +24,20 @@
  *
  **/
 
-module Wrapper (CLK50MHZ, SW0, JA1, JA2, JA3, JA4, CA, CB, CC, CD, CE, CF, CG, AN);
-	input CLK50MHZ, SW0;
-	output JA1, JA2, JA3, JA4, CA, CB, CC, CD, CE, CF, CG;
+module Wrapper (CLK50MHZ, SW0, JA1, JA2, JA3, JA4, CA, CB, CC, CD, CE, CF, CG, AN, JB1, JB2, LED);
+	input CLK50MHZ, SW0, JB1;
+	output JA1, JA2, JA3, JA4, CA, CB, CC, CD, CE, CF, CG, JB2;
 	output [7:0] AN;
+	output [15:0] LED;
 	
 	wire clock, reset;
 	assign clock = CLK50MHZ;
 	assign reset = 1'b0;
+	assign LED = {10'b0, distance};
 
 	wire rwe, mwe;
 	wire[4:0] rd, rs1, rs2;
+	wire[5:0] distance;
 	wire[31:0] instAddr, instData, 
 		rData, regA, regB,
 		memAddr, memDataIn, memDataOut, reg29, reg28, reg27, reg26, reg25;
@@ -77,13 +80,17 @@ module Wrapper (CLK50MHZ, SW0, JA1, JA2, JA3, JA4, CA, CB, CC, CD, CE, CF, CG, A
 		.addr(memAddr[11:0]), 
 		.dataIn(memDataIn), 
 		.dataOut(memDataOut),
-		.newGame(SW0));
+		.newGame(SW0),
+		.distance(distance));
 
-	// Stepper Control
+	// Stepper Control (Theta)
 	steppers STEPPER_CTRL(JA1, JA2, JA3, JA4, CLK50MHZ, reg25[1], reg25[0]);
 
 	// FPGA 7-seg Control
 	FPGA7seg LED_CTRL(CA, CB, CC, CD, CE, CF, CG, AN, reg28, reg27, reg26, CLK50MHZ);
+
+	// Ultrasonic Sensor
+	UScircuit SENSOR_CTRL(distance, JB1, JB2, CLK50MHZ);
 	
 
 endmodule
