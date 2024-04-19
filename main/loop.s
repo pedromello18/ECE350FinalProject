@@ -50,6 +50,7 @@ loop:
             Score:
                 addi $27, $27, 1
                 add $24, $28, $0
+                addi $24, $24, -1
 
             noScore:
                 addi $2, $0, 2

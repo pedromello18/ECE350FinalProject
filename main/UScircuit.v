@@ -30,7 +30,7 @@ module UScircuit(Mem1, JB1, JB2, CLK50MHZ);
             trigcounter <= trigcounter + 1;
             trig <= 1;
         end
-        else if ((trigcounter > 10) & (trigcounter < 500000)) begin // big number determines measure cycle (1/1000000) seconds
+        else if ((trigcounter > 10) & (trigcounter < 700000)) begin // big number determines measure cycle (1/1000) miliseconds
             trigcounter <= trigcounter + 1;
             trig <= 0;
         end
