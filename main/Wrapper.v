@@ -24,9 +24,9 @@
  *
  **/
 
-module Wrapper (CLK50MHZ, SW0, JA1, JA2, JA3, JA4, CA, CB, CC, CD, CE, CF, CG, AN, JB1, JB2, LED);
-	input CLK50MHZ, SW0, JB1;
-	output JA1, JA2, JA3, JA4, CA, CB, CC, CD, CE, CF, CG, JB2;
+module Wrapper (CLK50MHZ, SW0, SW1, JA1, JA2, JA3, JA4, CA, CB, CC, CD, CE, CF, CG, AN, JB1, JB2, JC1, JC2, LED);
+	input CLK50MHZ, SW0, SW1, JB1;
+	output JA1, JA2, JA3, JA4, CA, CB, CC, CD, CE, CF, CG, JB2, JC1, JC2;
 	output [7:0] AN;
 	output [15:0] LED;
 	
@@ -40,7 +40,7 @@ module Wrapper (CLK50MHZ, SW0, JA1, JA2, JA3, JA4, CA, CB, CC, CD, CE, CF, CG, A
 	wire[5:0] distance;
 	wire[31:0] instAddr, instData, 
 		rData, regA, regB,
-		memAddr, memDataIn, memDataOut, reg29, reg28, reg27, reg26, reg25;
+		memAddr, memDataIn, memDataOut, reg29, reg28, reg27, reg26, reg25, reg23;
 
 
 	// ADD YOUR MEMORY FILE HERE
@@ -72,7 +72,7 @@ module Wrapper (CLK50MHZ, SW0, JA1, JA2, JA3, JA4, CA, CB, CC, CD, CE, CF, CG, A
 		.ctrl_writeEnable(rwe), .ctrl_reset(reset), 
 		.ctrl_writeReg(rd),
 		.ctrl_readRegA(rs1), .ctrl_readRegB(rs2), 
-		.data_writeReg(rData), .data_readRegA(regA), .data_readRegB(regB), .reg29(reg29), .reg28(reg28), .reg27(reg27), .reg26(reg26), .reg25(reg25));
+		.data_writeReg(rData), .data_readRegA(regA), .data_readRegB(regB), .reg29(reg29), .reg28(reg28), .reg27(reg27), .reg26(reg26), .reg25(reg25), .reg23(reg23));
 						
 	// Processor Memory (RAM)
 	RAM ProcMem(.clk(clock), 
@@ -81,7 +81,8 @@ module Wrapper (CLK50MHZ, SW0, JA1, JA2, JA3, JA4, CA, CB, CC, CD, CE, CF, CG, A
 		.dataIn(memDataIn), 
 		.dataOut(memDataOut),
 		.newGame(SW0),
-		.distance(distance));
+		.distance(distance),
+		.goActuator(SW1));
 
 	// Stepper Control (Theta)
 	steppers STEPPER_CTRL(JA1, JA2, JA3, JA4, CLK50MHZ, reg25[1], reg25[0]);
@@ -91,6 +92,9 @@ module Wrapper (CLK50MHZ, SW0, JA1, JA2, JA3, JA4, CA, CB, CC, CD, CE, CF, CG, A
 
 	// Ultrasonic Sensor
 	UScircuit SENSOR_CTRL(distance, JB1, JB2, CLK50MHZ);
+
+	// Actuator
+	actuator ACTUATOR_CTRL(JC1, JC2, reg23[1], reg23[0]);
 	
 
 endmodule

@@ -7,10 +7,13 @@
 # 26 - max score
 # 25 - stepper control - bit 1 is direction; bit 0 is enable
 # 24 - moment of score increase
+# 23 - actuator control - bit 1 is up(1)/down(0), bit 0 is enable
+# 22 - moment of actuator push
 
 # SPECIAL MEMORY LOCATIONS:
 # address 0 - new game input
 # address 1 - ultrasonic sensor distance (not implemented yet)
+# address 2 - actuator input
 
 loop:
     addi $2, $0, 1
@@ -23,6 +26,8 @@ loop:
         add $29, $0, $0
         addi $25, $0, 1
         addi $24, $0, 81
+        addi $23, $23, 1
+        addi $22, $0, 81
         # LED countdown/sounds if applicable
 
         gameLoop:
@@ -44,15 +49,16 @@ loop:
                 addi $2, $0, 15
                 blt $2, $1, noScore
 
-                blt $28, $24, Score # implies max score is 80
+                blt $28, $24, Score
 
                 j noScore
             Score:
                 addi $27, $27, 1
                 add $24, $28, $0
-                addi $24, $24, -1
+                addi $24, $24, -1 # can't score in contiguous seconds, is fine because of actuator delay
 
             noScore:
+                # Motor Control
                 addi $2, $0, 2
                 and $3, $2, $28 # checks if bit1 of game clock is 1 - effectively, every two seconds
                 addi $4, $0, 1
@@ -63,6 +69,20 @@ loop:
                 motorLeft:
                     addi $25, $0, 1
                 motorDone:
+                    #Actuator Control
+                    lw $1, 2($0)
+                    blt $0, $1, actuatorOn
+                    sub $2, $22, $28
+                    addi $3, $0, 3
+                    blt $2, $3, actuatorDone
+                    j actuatorOff
+                    actuatorOn:
+                        addi $23, $0, 3
+                        addi $22, $28, 0
+                        j actuatorDone
+                    actuatorOff:
+                        addi $23, $0, 1
+                    actuatorDone:
                     blt $0, $28, gameLoop
                  
     gameOver:
@@ -74,6 +94,8 @@ loop:
         sll $2, $2, 16
         addi $2, $2, 25856
         
+        addi $23, $0, 1
+        
         stallLoop:
             blt $2, $1, gameOff
             addi $1, $1, 1
@@ -81,6 +103,7 @@ loop:
 
     gameOff:
         addi $28, $0, 80 # game length
+        addi $23, $0, 0
         blt $26, $27, maxScoreBeaten
         j maxScoreRemains
         maxScoreBeaten:
