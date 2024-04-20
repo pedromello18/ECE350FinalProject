@@ -24,9 +24,9 @@
  *
  **/
 
-module Wrapper (CLK50MHZ, SW0, SW1, JA1, JA2, JA3, JA4, CA, CB, CC, CD, CE, CF, CG, AN, JB1, JB2, JC1, JC2, LED);
+module Wrapper (CLK50MHZ, SW0, SW1, JA1, JA2, JA3, JA4, CA, CB, CC, CD, CE, CF, CG, AN, JB1, JB2, JC1, LED);
 	input CLK50MHZ, SW0, SW1, JB1;
-	output JA1, JA2, JA3, JA4, CA, CB, CC, CD, CE, CF, CG, JB2, JC1, JC2;
+	output JA1, JA2, JA3, JA4, CA, CB, CC, CD, CE, CF, CG, JB2, JC1;
 	output [7:0] AN;
 	output [15:0] LED;
 	
@@ -93,8 +93,7 @@ module Wrapper (CLK50MHZ, SW0, SW1, JA1, JA2, JA3, JA4, CA, CB, CC, CD, CE, CF, 
 	// Ultrasonic Sensor
 	UScircuit SENSOR_CTRL(distance, JB1, JB2, CLK50MHZ);
 
-	// Actuator
-	actuator ACTUATOR_CTRL(JC1, JC2, reg23[1], reg23[0]);
-	
+	// Actuator Control
+	assign JC1 = reg23[0];
 
 endmodule
