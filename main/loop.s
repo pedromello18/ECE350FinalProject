@@ -23,7 +23,6 @@ loop:
         add $29, $0, $0
         addi $25, $0, 1
         addi $24, $0, 81
-
         addi $1, $0, 762 # Start of LED control to show start of game
         sll $1, $1, 16
         addi $1, $1, 61568
@@ -54,7 +53,6 @@ loop:
             j stallLoopGameStartLEDoff
         TurnLEDStartOff:
             addi $22, $0, 0
-
         gameLoop:
             addi $29, $29, 10 # approx number of clock cycles for each game loop
             addi $1, $0, 762 # this block adds 50 000 000 to r1, the number of isns executed per second
@@ -108,8 +106,7 @@ loop:
                     blt $0, $28, gameLoop      
     gameOver:
         add $25, $0, $0 #stop motors
-        add $23, $0, $0 #retract actuator
-        # stall for a bit        
+        add $23, $0, $0 #retract actuator      
         addi $2, $0, 7629 # stall for a bit; adds 500 000 000 to r2, 10 seconds worth of isns
         sll $2, $2, 16
         addi $2, $2, 25856        
@@ -126,7 +123,6 @@ loop:
         j maxScoreRemains
         maxScoreBeaten:
             add $26, $27, $0 # Replace max score
-
             addi $1, $0, 762 # Start of LED control to show new high score
             sll $1, $1, 16
             addi $1, $1, 61568
@@ -159,5 +155,4 @@ loop:
                 addi $21, $0, 0
         maxScoreRemains:
             add $27, $0, $0 
-            #set all LEDs to low
 j loop
