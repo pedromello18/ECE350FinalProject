@@ -11,7 +11,7 @@
 # 21 - LED counter
 # SPECIAL MEMORY LOCATIONS:
 # address 0 - new game input
-# address 1 - ultrasonic sensor distance (not implemented yet)
+# address 1 - ultrasonic sensor distance
 # address 2 - actuator input
 loop:
     addi $2, $0, 1
@@ -27,28 +27,28 @@ loop:
         sll $1, $1, 16
         addi $1, $1, 61568
         stallLoopGameStartLED1:
-            addi $21, $0, 5
+            addi $21, $21, 1
             blt $1, $21, TurnLED1On
             j stallLoopGameStartLED1
         TurnLED1On:
             addi $22, $0, 1
         addi $21, $0, 5
         stallLoopGameStartLED2:
-            addi $21, $0, 5
+            addi $21, $21, 1
             blt $1, $21, TurnLED2On
             j stallLoopGameStartLED2
         TurnLED2On:
             addi $22, $0, 3
         addi $21, $0, 5
         stallLoopGameStartLED3:
-            addi $21, $0, 5
+            addi $21, $21, 1
             blt $1, $21, TurnLED3On
             j stallLoopGameStartLED3
         TurnLED3On:
             addi $22, $0, 7
         addi $21, $0, 5
         stallLoopGameStartLEDoff:
-            addi $21, $0, 5
+            addi $21, $21, 1
             blt $1, $21, TurnLEDStartOff
             j stallLoopGameStartLEDoff
         TurnLEDStartOff:
@@ -126,29 +126,30 @@ loop:
             addi $1, $0, 762 # Start of LED control to show new high score
             sll $1, $1, 16
             addi $1, $1, 61568
+            addi $21, $0, 3
             stallLoopHighScoreLED1:
-                addi $21, $0, 3
+                addi $21, $21, 1
                 blt $1, $21, TurnLEDHS1On
                 j stallLoopHighScoreLED1
             TurnLEDHS1On:
                 addi $22, $0, 32
             addi $21, $0, 3
             stallLoopHighScoreLED2:
-                addi $21, $0, 3
+                addi $21, $21, 1
                 blt $1, $21, TurnLEDHS2On
                 j stallLoopHighScoreLED2
             TurnLEDHS2On:
                 addi $22, $0, 64
             addi $21, $0, 3
             stallLoopHighScoreLED1Again:
-                addi $21, $0, 3
+                addi $21, $21, 1
                 blt $1, $21, TurnLEDHS1AgainOn
                 j stallLoopHighScoreLED1Again
             TurnLEDHS1AgainOn:
                 addi $22, $0, 32
             addi $21, $0, 5
             stallLoopHSLEDoff:
-                addi $21, $0, 5
+                addi $21, $21, 1
                 blt $1, $21, TurnLEDHSOff
                 j stallLoopHSLEDoff
             TurnLEDHSOff:
