@@ -24,9 +24,9 @@
  *
  **/
 
-module Wrapper (CLK50MHZ, SW0, SW1, JA1, JA2, JA3, JA4, CA, CB, CC, CD, CE, CF, CG, AN, JB1, JB2, JC1, LED);
+module Wrapper (CLK50MHZ, SW0, SW1, JA1, JA2, JA3, JA4, CA, CB, CC, CD, CE, CF, CG, AN, JB1, JB2, JC1, LED, JD1, JD2, JD3, JD4, JD7, JD8, JD9);
 	input CLK50MHZ, SW0, SW1, JB1;
-	output JA1, JA2, JA3, JA4, CA, CB, CC, CD, CE, CF, CG, JB2, JC1;
+	output JA1, JA2, JA3, JA4, CA, CB, CC, CD, CE, CF, CG, JB2, JC1, JD1, JD2, JD3, JD4, JD7, JD8, JD9;
 	output [7:0] AN;
 	output [15:0] LED;
 	
@@ -40,7 +40,7 @@ module Wrapper (CLK50MHZ, SW0, SW1, JA1, JA2, JA3, JA4, CA, CB, CC, CD, CE, CF, 
 	wire[5:0] distance;
 	wire[31:0] instAddr, instData, 
 		rData, regA, regB,
-		memAddr, memDataIn, memDataOut, reg29, reg28, reg27, reg26, reg25, reg23;
+		memAddr, memDataIn, memDataOut, reg29, reg28, reg27, reg26, reg25, reg23, reg22;
 
 
 	// ADD YOUR MEMORY FILE HERE
@@ -72,7 +72,7 @@ module Wrapper (CLK50MHZ, SW0, SW1, JA1, JA2, JA3, JA4, CA, CB, CC, CD, CE, CF, 
 		.ctrl_writeEnable(rwe), .ctrl_reset(reset), 
 		.ctrl_writeReg(rd),
 		.ctrl_readRegA(rs1), .ctrl_readRegB(rs2), 
-		.data_writeReg(rData), .data_readRegA(regA), .data_readRegB(regB), .reg29(reg29), .reg28(reg28), .reg27(reg27), .reg26(reg26), .reg25(reg25), .reg23(reg23));
+		.data_writeReg(rData), .data_readRegA(regA), .data_readRegB(regB), .reg29(reg29), .reg28(reg28), .reg27(reg27), .reg26(reg26), .reg25(reg25), .reg23(reg23), .reg22(reg22));
 						
 	// Processor Memory (RAM)
 	RAM ProcMem(.clk(clock), 
@@ -95,5 +95,14 @@ module Wrapper (CLK50MHZ, SW0, SW1, JA1, JA2, JA3, JA4, CA, CB, CC, CD, CE, CF, 
 
 	// Actuator Control
 	assign JC1 = reg23[0];
+
+	// LED Control
+	assign JD1 = reg22[0];
+	assign JD2 = reg22[1];
+	assign JD3 = reg22[2];
+	assign JD4 = reg22[3];
+	assign JD7 = reg22[4];
+	assign JD8 = reg22[5];
+	assign JD9 = reg22[6];
 
 endmodule
