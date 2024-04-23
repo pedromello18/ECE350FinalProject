@@ -2,14 +2,14 @@ module regfile (
 	clock,
 	ctrl_writeEnable, ctrl_reset, ctrl_writeReg,
 	ctrl_readRegA, ctrl_readRegB, data_writeReg,
-	data_readRegA, data_readRegB, reg29, reg28, reg27, reg26, reg25, reg23, reg22
+	data_readRegA, data_readRegB, reg29, reg28, reg27, reg26, reg25, reg23, reg22, reg20
 );
 
 	input clock, ctrl_writeEnable, ctrl_reset;
 	input [4:0] ctrl_writeReg, ctrl_readRegA, ctrl_readRegB;
 	input [31:0] data_writeReg;
 
-	output [31:0] data_readRegA, data_readRegB, reg29, reg28, reg27, reg26, reg25, reg23, reg22;
+	output [31:0] data_readRegA, data_readRegB, reg29, reg28, reg27, reg26, reg25, reg23, reg22, reg20;
 
 	wire [31:0] write, read1, read2;
 
@@ -22,6 +22,7 @@ module regfile (
 	assign reg25 = r25;
 	assign reg23 = r23;
 	assign reg22 = r22;
+	assign reg20 = r20;
 	
 	decoder32 WRITEREG(write, ctrl_writeReg, 1'b1);
 	decoder32 READ1REG(read1, ctrl_readRegA, 1'b1);

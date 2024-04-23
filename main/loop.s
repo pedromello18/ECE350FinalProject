@@ -7,8 +7,9 @@
 # 25 - stepper control - bit 1 is direction; bit 0 is enable
 # 24 - moment of score increase
 # 23 - actuator control - bit 0 is up(1)/down(0)
-# 22 - led control - bits 0-2 are for start of game; bit 3 is for score; bit 4 is for game end; bit 5-6 is for high score
+# 22 - led control - bits 0 is for start of game; bit 1 is for score; bit 2 is for game end; bit 3 is for high score
 # 21 - LED counter
+# 20 - Audio Control - bit 2 is enable, bit[1:0] select one of 4 audios - 00 is start, 01 is score, 10 is high score, 11 is end
 # SPECIAL MEMORY LOCATIONS:
 # address 0 - new game input
 # address 1 - ultrasonic sensor distance
@@ -26,33 +27,16 @@ loop:
         addi $1, $0, 762 # Start of LED control to show start of game
         sll $1, $1, 16
         addi $1, $1, 61568
-        stallLoopGameStartLED1:
-            addi $21, $21, 1
-            blt $1, $21, TurnLED1On
-            j stallLoopGameStartLED1
-        TurnLED1On:
-            addi $22, $0, 1
-        addi $21, $0, 5
-        stallLoopGameStartLED2:
-            addi $21, $21, 1
-            blt $1, $21, TurnLED2On
-            j stallLoopGameStartLED2
-        TurnLED2On:
-            addi $22, $0, 3
-        addi $21, $0, 5
-        stallLoopGameStartLED3:
-            addi $21, $21, 1
-            blt $1, $21, TurnLED3On
-            j stallLoopGameStartLED3
-        TurnLED3On:
-            addi $22, $0, 7
-        addi $21, $0, 5
+        addi $22, $0, 1
+        addi $20, $0, 4 # start audio sequence
+        addi $21, $0, 1
         stallLoopGameStartLEDoff:
             addi $21, $21, 1
             blt $1, $21, TurnLEDStartOff
             j stallLoopGameStartLEDoff
         TurnLEDStartOff:
             addi $22, $0, 0
+            addi $20, $0, 0
         gameLoop:
             addi $29, $29, 10 # approx number of clock cycles for each game loop
             addi $1, $0, 762 # this block adds 50 000 000 to r1, the number of isns executed per second
@@ -64,9 +48,9 @@ loop:
                 addi $28, $28, -1
                 add $29, $0, $0
             dontChangeTimer:
-                # if sensor distance < 15cm, score+=1
+                # if sensor distance < 10cm, score+=1
                 lw $1, 1($0)
-                addi $2, $0, 15
+                addi $2, $0, 10
                 blt $2, $1, noScore
                 blt $28, $24, Score
                 j noScore
@@ -74,13 +58,15 @@ loop:
                 addi $27, $27, 1
                 add $24, $28, $0
                 addi $24, $24, -1 # can't score in contiguous seconds, is fine because of actuator delay
-                addi $22, $0, 8
+                addi $22, $0, 2
+                addi $20, $0, 5 # score audio sequence
             noScore:
                 # LED Check
                 blt $28, $24, ScoreLEDOff
                 j noLEDScoreCtrl
                 ScoreLEDOff:
                     addi $22, $0, 0
+                    addi $20, $0, 0
                 noLEDScoreCtrl:
                 # Motor Control
                 addi $2, $0, 2
@@ -109,14 +95,16 @@ loop:
         add $23, $0, $0 #retract actuator      
         addi $2, $0, 7629 # stall for a bit; adds 500 000 000 to r2, 10 seconds worth of isns
         sll $2, $2, 16
-        addi $2, $2, 25856        
+        addi $2, $2, 25856    
+        addi $22, $0, 4
+        addi $20, $0, 7    
         stallLoop:
-            addi $22, $0, 16
             blt $2, $1, gameOff
             addi $1, $1, 1
             j stallLoop
     gameOff:
         addi $22, $0, 0
+        addi $20, $0, 0
         addi $28, $0, 80 # game length
         addi $23, $0, 0
         blt $26, $27, maxScoreBeaten
@@ -126,34 +114,16 @@ loop:
             addi $1, $0, 762 # Start of LED control to show new high score
             sll $1, $1, 16
             addi $1, $1, 61568
-            addi $21, $0, 3
-            stallLoopHighScoreLED1:
-                addi $21, $21, 1
-                blt $1, $21, TurnLEDHS1On
-                j stallLoopHighScoreLED1
-            TurnLEDHS1On:
-                addi $22, $0, 32
-            addi $21, $0, 3
-            stallLoopHighScoreLED2:
-                addi $21, $21, 1
-                blt $1, $21, TurnLEDHS2On
-                j stallLoopHighScoreLED2
-            TurnLEDHS2On:
-                addi $22, $0, 64
-            addi $21, $0, 3
-            stallLoopHighScoreLED1Again:
-                addi $21, $21, 1
-                blt $1, $21, TurnLEDHS1AgainOn
-                j stallLoopHighScoreLED1Again
-            TurnLEDHS1AgainOn:
-                addi $22, $0, 32
-            addi $21, $0, 5
+            addi $22, $0, 8 # HS LED Sequence
+            addi $20, $0, 6 # HS audio sequence
+            addi $21, $0, 1
             stallLoopHSLEDoff:
                 addi $21, $21, 1
                 blt $1, $21, TurnLEDHSOff
                 j stallLoopHSLEDoff
             TurnLEDHSOff:
-                addi $21, $0, 0
+                addi $22, $0, 0
+                addi $20, $0, 0
         maxScoreRemains:
             add $27, $0, $0 
 j loop
