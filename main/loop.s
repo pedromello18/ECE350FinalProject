@@ -69,7 +69,7 @@ loop:
                     addi $20, $0, 0
                 noLEDScoreCtrl:
                 # Motor Control
-                addi $2, $0, 2
+                addi $2, $0, 1
                 and $3, $2, $28 # checks if bit1 of game clock is 1 - effectively, every two seconds
                 addi $4, $0, 1
                 blt $3, $4, motorLeft

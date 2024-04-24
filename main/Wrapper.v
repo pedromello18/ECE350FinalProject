@@ -24,9 +24,9 @@
  *
  **/
 
-module Wrapper (CLK50MHZ, SW0, SW1, JA1, JA2, JA3, JA4, CA, CB, CC, CD, CE, CF, CG, AN, JB1, JB2, JC1, LED, JD1, JD2, JD3, JD4, JD7, JD8, JD9, audioEn, audioOut);
+module Wrapper (CLK50MHZ, SW0, SW1, JA1, JA2, JA3, JA4, CA, CB, CC, CD, CE, CF, CG, AN, JB1, JB2, JC1, LED, JD1, JD2, JD3, JD4, audioEn, audioOut);
 	input CLK50MHZ, SW0, SW1, JB1;
-	output JA1, JA2, JA3, JA4, CA, CB, CC, CD, CE, CF, CG, JB2, JC1, JD1, JD2, JD3, JD4, JD7, JD8, JD9, audioEn, audioOut;
+	output JA1, JA2, JA3, JA4, CA, CB, CC, CD, CE, CF, CG, JB2, JC1, JD1, JD2, JD3, JD4, audioEn, audioOut;
 	output [7:0] AN;
 	output [15:0] LED;
 	
